@@ -210,27 +210,21 @@ header p {
 footer {
   flex-shrink: 0;
   background: #ffc82c;
-  padding: 1vh 2vw;
+  padding: 1.2vh 3vw;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 3px solid #ac0d24;
   gap: 2vw;
 }
 
 .footer-left {
   display: flex;
-  align-items: center;
-  gap: 1.5vw;
-}
-
-.footer-combos-text {
-  display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .footer-combos-title {
-  font-size: clamp(18px, 1.6vw, 26px);
+  font-size: clamp(20px, 1.8vw, 30px);
   font-weight: 900;
   color: #1a1a1a;
   text-transform: uppercase;
@@ -238,10 +232,10 @@ footer {
 }
 
 .footer-combos-subtitle {
-  font-size: clamp(13px, 1vw, 18px);
+  font-size: clamp(16px, 1.3vw, 22px);
   font-weight: 600;
   color: #1a1a1a;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .footer-combos-subtitle strong {
@@ -254,7 +248,7 @@ footer {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 400;
-  line-height: 1.4;
+  margin-top: 0.3vh;
 }
 
 .footer-right {
@@ -266,7 +260,7 @@ footer {
 }
 
 .footer-hbn-title {
-  font-size: clamp(16px, 1.3vw, 22px);
+  font-size: clamp(18px, 1.5vw, 26px);
   font-weight: 700;
   color: #1a1a1a;
   text-transform: uppercase;
@@ -280,7 +274,7 @@ footer {
 }
 
 .footer-hbn-price {
-  font-size: clamp(28px, 2.8vw, 46px);
+  font-size: clamp(30px, 3vw, 50px);
   font-weight: 700;
   color: #1a1a1a;
   line-height: 1;
@@ -334,7 +328,7 @@ footer {
     </div>
     <div class="section">
       <div class="section-header">
-        <h2>BURGERS & SANDWICHES</h2>
+        <h2>BURGERS &amp; SANDWICHES</h2>
       </div>
       <div class="section-grid" id="grid-burgers"></div>
     </div>
@@ -345,18 +339,17 @@ footer {
       <div class="section-grid" id="grid-burritos"></div>
     </div>
   </div>
-  <footer id="footer-desayunos">
+
+  <footer>
     <div class="footer-left">
-      <div class="footer-combos-text">
-        <div class="footer-combos-title">LOS COMBOS INCLUYEN</div>
-        <div class="footer-combos-subtitle"><strong>Hash Brown Nuggets</strong> y Café</div>
-      </div>
+      <div class="footer-combos-title">LOS COMBOS INCLUYEN</div>
+      <div class="footer-combos-subtitle"><strong>Hash Brown Nuggets</strong> y Café</div>
       <div class="footer-note">HASH BROWN NUGGETS = 105 GR., CAFÉ = 590 ML.</div>
     </div>
     <div class="footer-right" id="hbn-precio">
       <div class="footer-hbn-title">Hash Brown Nuggets</div>
       <div class="footer-hbn-sub">105 gr</div>
-      <div class="footer-hbn-price" data-field="burger" data-producto-id=""><span class="footer-hbn-currency">$</span>40</div>
+      <div class="footer-hbn-price" data-field="burger" data-producto-id=""><span class="footer-hbn-currency">$</span><span id="hbn-valor">40</span></div>
     </div>
   </footer>
 </div>
@@ -447,14 +440,14 @@ function renderProduct(producto, precio, seccion) {
 function handlePriceUpdate(payload) {
   var row = payload.new;
 
-  var hbnEl = document.querySelector('#hbn-precio [data-producto-id="' + row.producto_id + '"]');
-  if (hbnEl && row.burger !== undefined) {
+  var hbnPriceEl = document.querySelector('#hbn-precio [data-producto-id="' + row.producto_id + '"]');
+  if (hbnPriceEl) {
     var formatted = formatPrice(row.burger);
     if (formatted !== null) {
-      hbnEl.innerHTML = '<span class="footer-hbn-currency">$</span>' + formatted;
-      hbnEl.classList.remove('flash');
-      void hbnEl.offsetWidth;
-      hbnEl.classList.add('flash');
+      document.getElementById('hbn-valor').textContent = formatted;
+      hbnPriceEl.classList.remove('flash');
+      void hbnPriceEl.offsetWidth;
+      hbnPriceEl.classList.add('flash');
     }
   }
 
@@ -528,10 +521,10 @@ async function init() {
   var hbn = productos.find(function(p) { return p.numero === HBN_NUMERO; });
   if (hbn) {
     var hbnPrecio = hbn.precios.find(function(p) { return p.sucursal_id === sucursalId; }) || {};
-    var hbnEl = document.querySelector('#hbn-precio [data-field="burger"]');
-    if (hbnEl && hbnPrecio.burger !== null) {
-      hbnEl.dataset.productoId = hbn.id;
-      hbnEl.innerHTML = '<span class="footer-hbn-currency">$</span>' + formatPrice(hbnPrecio.burger);
+    var hbnPriceEl = document.querySelector('#hbn-precio [data-field="burger"]');
+    if (hbnPriceEl && hbnPrecio.burger !== null) {
+      hbnPriceEl.dataset.productoId = hbn.id;
+      document.getElementById('hbn-valor').textContent = formatPrice(hbnPrecio.burger);
     }
   }
 

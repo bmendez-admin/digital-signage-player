@@ -14,21 +14,20 @@ html, body {
   height: 1920px;
   overflow: hidden;
   font-family: 'Oswald', 'Arial Black', sans-serif;
+  background: #ffffff;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
 }
 
-/* HEADER PRINCIPAL — solo DESAYUNOS */
+/* ── HEADER DESAYUNOS ── 160px */
 header {
   width: 1080px;
-  height: 140px;
+  height: 160px;
   flex-shrink: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #2a2a2a;
@@ -38,28 +37,28 @@ header {
 }
 
 header h1 {
-  font-size: 96px;
+  font-size: 100px;
   color: #ffffff;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 700;
-  text-shadow: 0 2px 12px rgba(255,215,0,0.2), 0 2px 4px rgba(0,0,0,0.9);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.9);
   line-height: 1;
 }
 
 header h1::before,
 header h1::after {
   content: '\2605';
-  margin: 0 0.2em;
-  font-size: 0.5em;
+  margin: 0 0.15em;
+  font-size: 0.45em;
   color: #ffd700;
   vertical-align: middle;
 }
 
-/* HEADER SECCIÓN BISCUITS — fondo gris claro textura, tipografía especial */
-.section-header-biscuits {
+/* ── BISCUITS HEADER ── 200px, fondo madera clara, tipografía grande */
+#biscuits-header {
   width: 1080px;
-  height: 160px;
+  height: 200px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -69,121 +68,136 @@ header h1::after {
   background-image: url('img/bg-light.jpg');
   background-size: cover;
   background-position: center;
+  line-height: 1;
 }
 
-.section-header-biscuits .script {
+#biscuits-header .script {
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: 52px;
+  font-weight: 700;
+  font-size: 60px;
   color: #1a1a1a;
   line-height: 1;
-  font-weight: 700;
 }
 
-.section-header-biscuits .bold {
+#biscuits-header .bold {
   font-family: 'Oswald', sans-serif;
-  font-size: 88px;
   font-weight: 700;
+  font-size: 80px;
   color: #1a1a1a;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
   line-height: 1;
-  letter-spacing: 0.04em;
 }
 
-/* GRID BISCUITS — fondo blanco, 2x2 */
+/* ── GRID BISCUITS ── 760px total, 2 filas × 380px, fondo blanco */
 #grid-biscuits {
   width: 1080px;
-  height: 720px;
+  height: 760px;
   flex-shrink: 0;
   display: grid;
   grid-template-columns: 540px 540px;
-  grid-template-rows: 360px 360px;
+  grid-template-rows: 380px 380px;
   background: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.08);
 }
 
-/* SEPARADOR OSCURO entre secciones */
-.section-divider {
+/* ── SEPARADOR BURGERS ── 52px */
+#burgers-header {
   width: 1080px;
-  height: 24px;
+  height: 52px;
   flex-shrink: 0;
-  background-color: #3a3530;
-}
-
-/* HEADER SECCIONES BURGERS Y BURRITOS — solo texto, sin fondo especial */
-.section-header-dark {
-  width: 1080px;
-  height: 0px;
-  flex-shrink: 0;
-}
-
-/* GRID BURGERS — fondo madera, 1 fila */
-#grid-burgers {
-  width: 1080px;
-  height: 380px;
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: 540px 540px;
-  grid-template-rows: 380px;
-  background-color: #d0c8c0;
-  background-image: url('img/bg-light.jpg');
-  background-size: cover;
-  background-position: center;
-}
-
-/* SEPARADOR entre burgers y burritos */
-.section-divider-label {
-  width: 1080px;
-  height: 48px;
-  flex-shrink: 0;
-  background-color: #3a3530;
+  background: #2a2520;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.section-divider-label span {
-  font-size: 26px;
+#burgers-header span {
+  font-size: 30px;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
 }
 
-/* GRID BURRITOS — fondo madera, 1 fila */
-#grid-burritos {
+/* ── GRID BURGERS ── 374px, 1 fila */
+#grid-burgers {
   width: 1080px;
-  height: 380px;
+  height: 374px;
   flex-shrink: 0;
   display: grid;
   grid-template-columns: 540px 540px;
-  grid-template-rows: 380px;
+  grid-template-rows: 374px;
   background-color: #d0c8c0;
   background-image: url('img/bg-light.jpg');
   background-size: cover;
   background-position: center;
 }
 
-/* PRODUCTO */
+/* ── SEPARADOR BURRITOS ── 52px 
+#burritos-header {
+  width: 1080px;
+  height: 52px;
+  flex-shrink: 0;
+  background: #2a2520;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#burritos-header span {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}*/
+
+/* ── GRID BURRITOS ── 374px, 1 fila */
+#grid-burritos {
+  width: 1080px;
+  height: 374px;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 540px 540px;
+  grid-template-rows: 374px;
+  background-color: #d0c8c0;
+  background-image: url('img/bg-light.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* ── FOOTER ── 96px amarillo */
+footer {
+  width: 1080px;
+  height: 96px;
+  flex-shrink: 0;
+  background: #ffc82c;
+  padding: 0 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── PRODUCTO ── */
 .product {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding: 10px 28px 18px;
+  padding: 12px 28px 16px;
   overflow: hidden;
-  border-right: 1px solid rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-.product:nth-child(even) {
-  border-right: none;
-}
+.product:nth-child(even) { border-right: none; }
 
 .product-image {
   flex: 1;
-  width: 85%;
+  width: 90%;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   min-height: 0;
 }
@@ -193,7 +207,7 @@ header h1::after {
   max-height: 100%;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.2));
 }
 
 .product-info {
@@ -203,28 +217,24 @@ header h1::after {
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
   padding-top: 8px;
 }
 
-.product-name-block {
-  flex: 1;
-  min-width: 0;
-}
+.product-name-block { flex: 1; min-width: 0; }
 
 .product-name {
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 700;
   line-height: 1.05;
   color: #1a1a1a;
 }
 
 .product-subtitle {
-  font-size: 20px;
-  color: #555555;
+  font-size: 22px;
+  color: #555;
   font-weight: 400;
   font-style: italic;
-  line-height: 1.2;
 }
 
 .prices {
@@ -232,18 +242,16 @@ header h1::after {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0;
 }
 
 .price-item {
   display: flex;
   align-items: baseline;
   gap: 3px;
-  justify-content: flex-end;
 }
 
 .price-label {
-  font-size: 15px;
+  font-size: 20px;
   color: #1a1a1a;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -251,38 +259,25 @@ header h1::after {
 }
 
 .price-value {
-  font-size: 56px;
+  font-size: 60px;
   font-weight: 700;
   line-height: 1;
   color: #1a1a1a;
 }
 
 .price-currency {
-  font-size: 26px;
+  font-size: 28px;
   vertical-align: super;
-  margin-right: 1px;
 }
 
-/* FOOTER */
-footer {
-  width: 1080px;
-  height: 68px;
-  flex-shrink: 0;
-  background: #ffc82c;
-  padding: 0 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
+/* ── FOOTER CONTENIDO ── */
 .footer-left {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .footer-combos-title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 900;
   color: #1a1a1a;
   text-transform: uppercase;
@@ -290,52 +285,54 @@ footer {
 }
 
 .footer-combos-subtitle {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
   color: #1a1a1a;
-  line-height: 1.2;
 }
 
 .footer-note {
-  font-size: 10px;
-  color: #444444;
+  font-size: 11px;
+  color: #444;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  font-weight: 400;
+  margin-top: 3px;
 }
 
 .footer-right {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
+  text-align: right;
+}
+
+.footer-hbn-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .footer-hbn-title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   color: #1a1a1a;
   text-transform: uppercase;
   line-height: 1;
-  text-align: right;
 }
 
 .footer-hbn-sub {
-  font-size: 11px;
-  color: #444444;
-  font-weight: 400;
-  text-align: right;
+  font-size: 12px;
+  color: #444;
 }
 
 .footer-hbn-price {
-  font-size: 52px;
+  font-size: 68px;
   font-weight: 700;
   color: #1a1a1a;
   line-height: 1;
 }
 
 .footer-hbn-currency {
-  font-size: 26px;
+  font-size: 32px;
   vertical-align: super;
 }
 
@@ -344,13 +341,12 @@ footer {
   position: fixed;
   inset: 0;
   background: #3b3b3b;
-  color: #ffffff;
+  color: #fff;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2vh;
   font-size: 28px;
-  padding: 80px;
   text-align: center;
   z-index: 100;
 }
@@ -368,24 +364,20 @@ footer {
 <body>
 
 <header>
-  <h1 id="menu-title">Cargando...</h1>
+  <h1>DESAYUNOS</h1>
 </header>
 
-<div class="section-header-biscuits">
+<div id="biscuits-header">
   <div class="script">Made From Scratch</div>
   <div class="bold">BISCUITS</div>
 </div>
 
 <div id="grid-biscuits"></div>
 
-<div class="section-divider-label">
-  <span>BURGERS &amp; SANDWICHES</span>
-</div>
+<div id="burgers-header"><span>BURGERS &amp; SANDWICHES</span></div>
 <div id="grid-burgers"></div>
 
-<div class="section-divider-label">
-  <span>BURRITOS</span>
-</div>
+<!-- <div id="burritos-header"><span>BURRITOS</span></div> -->
 <div id="grid-burritos"></div>
 
 <footer>
@@ -395,7 +387,7 @@ footer {
     <div class="footer-note">HASH BROWN NUGGETS = 105 GR., CAFÉ = 590 ML.</div>
   </div>
   <div class="footer-right" id="hbn-precio">
-    <div>
+    <div class="footer-hbn-label">
       <div class="footer-hbn-title">Hash Brown Nuggets</div>
       <div class="footer-hbn-sub">105 gr</div>
     </div>
@@ -467,10 +459,9 @@ function renderProduct(producto, precio, seccion) {
 
   var label = getLabelPrecio(seccion, producto.numero);
 
-  var imageHTML = '';
-  if (producto.imagen_url) {
-    imageHTML = '<div class="product-image"><img src="' + producto.imagen_url + '" alt="' + producto.nombre + '"></div>';
-  }
+  var imageHTML = producto.imagen_url
+    ? '<div class="product-image"><img src="' + producto.imagen_url + '" alt="' + producto.nombre + '"></div>'
+    : '';
 
   var precioBase = buildPriceHTML(label, precio.burger, 'burger');
   var precioCombo = buildPriceHTML('Combo', precio.combo, 'combo');
@@ -541,7 +532,6 @@ async function init() {
   }
   var plantilla = plantillaRes.data;
 
-  document.getElementById('menu-title').textContent = plantilla.nombre;
   document.title = plantilla.nombre + ' — ' + sucursalSlug;
 
   var productosRes = await db

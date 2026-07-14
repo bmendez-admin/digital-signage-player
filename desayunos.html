@@ -1,578 +1,582 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Desayunos</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desayunos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-html, body {
-  width: 1080px;
-  height: 1920px;
-  overflow: hidden;
-  font-family: 'Oswald', 'Arial Black', sans-serif;
-  background: #ffffff;
-}
+        html,
+        body {
+            width: 1080px;
+            height: 1920px;
+            overflow: hidden;
+            font-family: 'Oswald', 'Arial Black', sans-serif;
+            background: #ffffff;
+        }
 
-body {
-  display: flex;
-  flex-direction: column;
-}
+        body {
+            display: flex;
+            flex-direction: column;
+        }
 
-/* ── HEADER DESAYUNOS ── 160px */
-header {
-  width: 1080px;
-  height: 160px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #2a2a2a;
-  background-image: url('img/bg-dark.jpg');
-  background-size: cover;
-  background-position: center;
-}
+        /* ── HEADER DESAYUNOS ── 160px */
+        header {
+            width: 1080px;
+            height: 160px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2a2a2a;
+            background-image: url('img/bg-dark.jpg');
+            background-size: cover;
+            background-position: center;
+        }
 
-header h1 {
-  font-size: 100px;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-  line-height: 1;
-}
+        header h1 {
+            font-size: 100px;
+            color: #ffffff;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+            line-height: 1;
+        }
 
-header h1::before,
-header h1::after {
-  content: '\2605';
-  margin: 0 0.15em;
-  font-size: 0.45em;
-  color: #ffd700;
-  vertical-align: middle;
-}
+        header h1::before,
+        header h1::after {
+            content: '\2605';
+            margin: 0 0.15em;
+            font-size: 0.45em;
+            color: #ffd700;
+            vertical-align: middle;
+        }
 
-/* ── BISCUITS HEADER ── 200px, fondo madera clara, tipografía grande */
-#biscuits-header {
-  width: 1080px;
-  height: 200px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #d0c8c0;
-  background-image: url('img/bg-light.jpg');
-  background-size: cover;
-  background-position: center;
-  line-height: 1;
-}
+        /* ── BISCUITS HEADER ── */
+        #biscuits-header {
+            width: 1080px;
+            height: 150px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #d0c8c0;
+            background-image: url('img/bg-light.jpg');
+            background-size: cover;
+            background-position: center;
+            line-height: 1;
+        }
 
-#biscuits-header .script {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: 60px;
-  color: #1a1a1a;
-  line-height: 1;
-}
+        #biscuits-header .script {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 700;
+            font-size: 60px;
+            color: #1a1a1a;
+            line-height: 1;
+        }
 
-#biscuits-header .bold {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 80px;
-  color: #1a1a1a;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
+        #biscuits-header .bold {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 80px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 1;
+        }
 
-/* ── GRID BISCUITS ── 760px total, 2 filas × 380px, fondo blanco */
-#grid-biscuits {
-  width: 1080px;
-  height: 760px;
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: 540px 540px;
-  grid-template-rows: 380px 380px;
-  background: #ffffff;
-  border-top: 1px solid rgba(0,0,0,0.08);
-}
+        /* ── GRID BISCUITS ── 760px total, 2 filas × 380px, fondo blanco */
+        #grid-biscuits {
+            width: 1080px;
+            height: 760px;
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: 540px 540px;
+            grid-template-rows: 380px 380px;
+            background: #ffffff;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
 
-/* ── SEPARADOR BURGERS ── 52px */
-#burgers-header {
-  width: 1080px;
-  height: 20px;
-  flex-shrink: 0;
-  background: #2a2520;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        /* ── SEPARADOR BURGERS ── 52px */
+        #burgers-header {
+            width: 1080px;
+            height: 12px;
+            flex-shrink: 0;
+            background: #3a3530;
+        }
 
-/* ── GRID BURGERS ── 374px, 1 fila */
-#grid-burgers {
-  width: 1080px;
-  height: 374px;
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: 540px 540px;
-  grid-template-rows: 374px;
-  background-color: #d0c8c0;
-  background-image: url('img/bg-light.jpg');
-  background-size: cover;
-  background-position: center;
-}
+        /* ── GRID BURGERS ── 374px, 1 fila */
+        #grid-burgers {
+            width: 1080px;
+            height: 374px;
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: 540px 540px;
+            grid-template-rows: 374px;
+            background-color: #d0c8c0;
+            background-image: url('img/bg-light.jpg');
+            background-size: cover;
+            background-position: center;
+        }
 
-/* ── SEPARADOR BURRITOS ── 52px 
-#burritos-header {
-  width: 1080px;
-  height: 52px;
-  flex-shrink: 0;
-  background: #2a2520;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        /* ── GRID BURRITOS ── 374px, 1 fila */
+        #grid-burritos {
+            width: 1080px;
+            height: 374px;
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: 540px 540px;
+            grid-template-rows: 374px;
+            background-color: #d0c8c0;
+            background-image: url('img/bg-light.jpg');
+            background-size: cover;
+            background-position: center;
+        }
 
-#burritos-header span {
-  font-size: 30px;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}*/
+        /* ── FOOTER ── 96px amarillo */
+        footer {
+            width: 1080px;
+            height: 96px;
+            flex-shrink: 0;
+            background: #ffc82c;
+            padding: 0 52px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-/* ── GRID BURRITOS ── 374px, 1 fila */
-#grid-burritos {
-  width: 1080px;
-  height: 374px;
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: 540px 540px;
-  grid-template-rows: 374px;
-  background-color: #d0c8c0;
-  background-image: url('img/bg-light.jpg');
-  background-size: cover;
-  background-position: center;
-}
+        /* ── PRODUCTO ── */
+        .product {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 28px 16px;
+            overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
-/* ── FOOTER ── 96px amarillo */
-footer {
-  width: 1080px;
-  height: 96px;
-  flex-shrink: 0;
-  background: #ffc82c;
-  padding: 0 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+        .product:nth-child(even) {
+            border-right: none;
+        }
 
-/* ── PRODUCTO ── */
-.product {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 28px 16px;
-  overflow: hidden;
-  border-right: 1px solid rgba(0,0,0,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-}
+        .product-image {
+            width: 90%;
+            height: 220px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.product:nth-child(even) { border-right: none; }
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.2));
+        }
 
-.product-image {
-  flex: 1;
-  width: 90%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-}
+        .product-info {
+            flex-shrink: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 8px;
+        }
 
-.product-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.2));
-}
+        .product-name-block {
+            flex: 1;
+            min-width: 0;
+        }
 
-.product-info {
-  flex-shrink: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 10px;
-  padding-top: 8px;
-}
+        .product-name {
+            font-size: 38px;
+            font-weight: 700;
+            line-height: 1.05;
+            color: #1a1a1a;
+        }
 
-.product-name-block { flex: 1; min-width: 0; }
+        .product-subtitle {
+            font-size: 28px;
+            color: #000;
+            font-weight: 400;
+            font-style: italic;
+        }
 
-.product-name {
-  font-size: 38px;
-  font-weight: 700;
-  line-height: 1.05;
-  color: #1a1a1a;
-  word-break: break-word;
-  max-width: 200px;
-}
+        .prices {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
 
-.product-subtitle {
-  font-size: 22px;
-  color: #555;
-  font-weight: 400;
-  font-style: italic;
-}
+        .price-item {
+            display: flex;
+            align-items: baseline;
+            gap: 3px;
+        }
 
-.prices {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
+        .price-label {
+            font-size: 20px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+        }
 
-.price-item {
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-}
+        .price-value {
+            font-size: 60px;
+            font-weight: 700;
+            line-height: 1;
+            color: #1a1a1a;
+        }
 
-.price-label {
-  font-size: 20px;
-  color: #1a1a1a;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 700;
-}
+        .price-currency {
+            font-size: 28px;
+            vertical-align: super;
+        }
 
-.price-value {
-  font-size: 60px;
-  font-weight: 700;
-  line-height: 1;
-  color: #1a1a1a;
-}
+        /* ── FOOTER CONTENIDO ── */
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+        }
 
-.price-currency {
-  font-size: 28px;
-  vertical-align: super;
-}
+        .footer-combos-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            line-height: 1;
+        }
 
-/* ── FOOTER CONTENIDO ── */
-.footer-left {
-  display: flex;
-  flex-direction: column;
-}
+        .footer-combos-subtitle {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
 
-.footer-combos-title {
-  font-size: 26px;
-  font-weight: 900;
-  color: #1a1a1a;
-  text-transform: uppercase;
-  line-height: 1;
-}
+        .footer-note {
+            font-size: 11px;
+            color: #444;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
 
-.footer-combos-subtitle {
-  font-size: 22px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
+        .footer-right {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            text-align: right;
+        }
 
-.footer-note {
-  font-size: 11px;
-  color: #444;
-  text-transform: uppercase;
-  margin-top: 3px;
-}
+        .footer-hbn-label {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
 
-.footer-right {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
-  text-align: right;
-}
+        .footer-hbn-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            line-height: 1;
+        }
 
-.footer-hbn-label {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
+        .footer-hbn-sub {
+            font-size: 12px;
+            color: #444;
+        }
 
-.footer-hbn-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1a1a1a;
-  text-transform: uppercase;
-  line-height: 1;
-}
+        .footer-hbn-price {
+            font-size: 68px;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1;
+        }
 
-.footer-hbn-sub {
-  font-size: 12px;
-  color: #444;
-}
+        .footer-hbn-currency {
+            font-size: 32px;
+            vertical-align: super;
+        }
 
-.footer-hbn-price {
-  font-size: 68px;
-  font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1;
-}
+        #status {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #3b3b3b;
+            color: #fff;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2vh;
+            font-size: 28px;
+            text-align: center;
+            z-index: 100;
+        }
 
-.footer-hbn-currency {
-  font-size: 32px;
-  vertical-align: super;
-}
+        .status-icon {
+            font-size: 3em;
+        }
 
-#status {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: #3b3b3b;
-  color: #fff;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2vh;
-  font-size: 28px;
-  text-align: center;
-  z-index: 100;
-}
+        @keyframes price-flash {
+            0% {
+                color: #ac0d24;
+                transform: scale(1.2);
+            }
 
-.status-icon { font-size: 3em; }
+            100% {
+                color: #1a1a1a;
+                transform: scale(1);
+            }
+        }
 
-@keyframes price-flash {
-  0% { color: #ac0d24; transform: scale(1.2); }
-  100% { color: #1a1a1a; transform: scale(1); }
-}
-
-.flash { animation: price-flash 0.6s ease-out; }
-</style>
+        .flash {
+            animation: price-flash 0.6s ease-out;
+        }
+    </style>
 </head>
+
 <body>
 
-<header>
-  <h1>DESAYUNOS</h1>
-</header>
+    <header>
+        <h1>DESAYUNOS</h1>
+    </header>
 
-<div id="biscuits-header">
-  <div class="script">Made From Scratch</div>
-  <div class="bold">BISCUITS</div>
-</div>
-
-<div id="grid-biscuits"></div>
-
-<div id="burgers-header"></div>
-<div id="grid-burgers"></div>
-<div id="grid-burritos"></div>
-
-<footer>
-  <div class="footer-left">
-    <div class="footer-combos-title">LOS COMBOS INCLUYEN</div>
-    <div class="footer-combos-subtitle">Hash Brown Nuggets y Café</div>
-    <div class="footer-note">HASH BROWN NUGGETS = 105 GR., CAFÉ = 590 ML.</div>
-  </div>
-  <div class="footer-right" id="hbn-precio">
-    <div class="footer-hbn-label">
-      <div class="footer-hbn-title">Hash Brown Nuggets</div>
-      <div class="footer-hbn-sub">105 gr</div>
+    <div id="biscuits-header">
+        <div class="script">Made From Scratch</div>
+        <div class="bold">BISCUITS</div>
     </div>
-    <div class="footer-hbn-price" data-field="burger" data-producto-id=""><span class="footer-hbn-currency">$</span><span id="hbn-valor">40</span></div>
-  </div>
-</footer>
 
-<div id="status">
-  <div class="status-icon"></div>
-  <div id="status-message">Conectando...</div>
-</div>
+    <div id="grid-biscuits"></div>
 
-<script>
-var CONFIG = {
-  url: 'https://gbklqpbcllhdixiuxwzt.supabase.co',
-  key: 'sb_publishable_478TOeFf5POv09rZ58BeyQ_BA8rY8cf'
-};
+    <div id="burgers-header"></div>
+    <div id="grid-burgers"></div>
+    <div id="grid-burritos"></div>
 
-var SECCIONES = {
-  biscuits: { gridId: 'grid-biscuits', numeros: [1, 2, 3, 4], labelPrecio: 'Biscuit' },
-  burgers:  { gridId: 'grid-burgers',  numeros: [5, 6],       labelPrecio: { 5: 'Burger', 6: 'Sandwich' } },
-  burritos: { gridId: 'grid-burritos', numeros: [7, 8],       labelPrecio: 'Burrito' }
-};
+    <footer>
+        <div class="footer-left">
+            <div class="footer-combos-title">LOS COMBOS INCLUYEN</div>
+            <div class="footer-combos-subtitle">Hash Brown Nuggets y Café</div>
+            <div class="footer-note">HASH BROWN NUGGETS = 105 GR., CAFÉ = 590 ML.</div>
+        </div>
+        <div class="footer-right" id="hbn-precio">
+            <div class="footer-hbn-label">
+                <div class="footer-hbn-title">Hash Brown Nuggets</div>
+                <div class="footer-hbn-sub">105 gr</div>
+            </div>
+            <div class="footer-hbn-price" data-field="burger" data-producto-id=""><span
+                    class="footer-hbn-currency">$</span><span id="hbn-valor">40</span></div>
+        </div>
+    </footer>
 
-var HBN_NUMERO = 9;
+    <div id="status">
+        <div class="status-icon"></div>
+        <div id="status-message">Conectando...</div>
+    </div>
 
-var params = new URLSearchParams(window.location.search);
-var sucursalSlug = params.get('sucursal');
-var plantillaSlug = params.get('plantilla');
+    <script>
+        var CONFIG = {
+            url: 'https://gbklqpbcllhdixiuxwzt.supabase.co',
+            key: 'sb_publishable_478TOeFf5POv09rZ58BeyQ_BA8rY8cf'
+        };
 
-var db = supabase.createClient(CONFIG.url, CONFIG.key);
+        var SECCIONES = {
+            biscuits: { gridId: 'grid-biscuits', numeros: [1, 2, 3, 4], labelPrecio: 'Biscuit' },
+            burgers: { gridId: 'grid-burgers', numeros: [5, 6], labelPrecio: { 5: 'Burger', 6: 'Sandwich' } },
+            burritos: { gridId: 'grid-burritos', numeros: [7, 8], labelPrecio: 'Burrito' }
+        };
 
-function formatPrice(value) {
-  if (value === null || value === undefined) return null;
-  var num = parseFloat(value);
-  return Number.isInteger(num) ? num.toString() : num.toFixed(2);
-}
+        var HBN_NUMERO = 9;
 
-function showStatus(icon, message) {
-  var el = document.getElementById('status');
-  el.style.display = 'flex';
-  el.querySelector('.status-icon').textContent = icon;
-  el.querySelector('#status-message').textContent = message;
-}
+        var params = new URLSearchParams(window.location.search);
+        var sucursalSlug = params.get('sucursal');
+        var plantillaSlug = params.get('plantilla');
 
-function hideStatus() {
-  document.getElementById('status').style.display = 'none';
-}
+        var db = supabase.createClient(CONFIG.url, CONFIG.key);
 
-function getLabelPrecio(seccion, numero) {
-  if (typeof seccion.labelPrecio === 'object') {
-    return seccion.labelPrecio[numero] || 'Precio';
-  }
-  return seccion.labelPrecio;
-}
+        function formatPrice(value) {
+            if (value === null || value === undefined) return null;
+            var num = parseFloat(value);
+            return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+        }
 
-function buildPriceHTML(label, value, field) {
-  if (value === null || value === undefined) return '';
-  return '<div class="price-item">' +
-    '<span class="price-label">' + label + '</span>' +
-    '<span class="price-value" data-field="' + field + '"><span class="price-currency">$</span>' + formatPrice(value) + '</span>' +
-  '</div>';
-}
+        function showStatus(icon, message) {
+            var el = document.getElementById('status');
+            el.style.display = 'flex';
+            el.querySelector('.status-icon').textContent = icon;
+            el.querySelector('#status-message').textContent = message;
+        }
 
-function renderProduct(producto, precio, seccion) {
-  var card = document.createElement('div');
-  card.className = 'product';
-  card.dataset.productoId = producto.id;
+        function hideStatus() {
+            document.getElementById('status').style.display = 'none';
+        }
 
-  var label = getLabelPrecio(seccion, producto.numero);
+        function getLabelPrecio(seccion, numero) {
+            if (typeof seccion.labelPrecio === 'object') {
+                return seccion.labelPrecio[numero] || 'Precio';
+            }
+            return seccion.labelPrecio;
+        }
 
-  var imageHTML = producto.imagen_url
-    ? '<div class="product-image"><img src="' + producto.imagen_url + '" alt="' + producto.nombre + '"></div>'
-    : '';
+        function buildPriceHTML(label, value, field) {
+            if (value === null || value === undefined) return '';
+            return '<div class="price-item">' +
+                '<span class="price-label">' + label + '</span>' +
+                '<span class="price-value" data-field="' + field + '"><span class="price-currency">$</span>' + formatPrice(value) + '</span>' +
+                '</div>';
+        }
 
-  var precioBase = buildPriceHTML(label, precio.burger, 'burger');
-  var precioCombo = buildPriceHTML('Combo', precio.combo, 'combo');
+        function renderProduct(producto, precio, seccion) {
+            var card = document.createElement('div');
+            card.className = 'product';
+            card.dataset.productoId = producto.id;
 
-  card.innerHTML =
-    imageHTML +
-    '<div class="product-info">' +
-      '<div class="product-name-block">' +
-        '<div class="product-name">' + producto.nombre + '</div>' +
-        (producto.subtitulo ? '<div class="product-subtitle">' + producto.subtitulo + '</div>' : '') +
-      '</div>' +
-      '<div class="prices">' + precioBase + precioCombo + '</div>' +
-    '</div>';
+            var label = getLabelPrecio(seccion, producto.numero);
 
-  return card;
-}
+            var imageHTML = producto.imagen_url
+                ? '<div class="product-image"><img src="' + producto.imagen_url + '" alt="' + producto.nombre + '"></div>'
+                : '';
 
-function handlePriceUpdate(payload) {
-  var row = payload.new;
+            var precioBase = buildPriceHTML(label, precio.burger, 'burger');
+            var precioCombo = buildPriceHTML('Combo', precio.combo, 'combo');
+            var nombreFormateado = producto.nombre.replace(',', ',<br>');
 
-  var hbnPriceEl = document.querySelector('#hbn-precio [data-producto-id="' + row.producto_id + '"]');
-  if (hbnPriceEl) {
-    var formatted = formatPrice(row.burger);
-    if (formatted !== null) {
-      document.getElementById('hbn-valor').textContent = formatted;
-      hbnPriceEl.classList.remove('flash');
-      void hbnPriceEl.offsetWidth;
-      hbnPriceEl.classList.add('flash');
-    }
-  }
+            card.innerHTML =
+                imageHTML +
+                '<div class="product-info">' +
+                '<div class="product-name-block">' +
+                '<div class="product-name">' + nombreFormateado + '</div>' +
+                (producto.subtitulo ? '<div class="product-subtitle">' + producto.subtitulo + '</div>' : '') +
+                '</div>' +
+                '<div class="prices">' + precioBase + precioCombo + '</div>' +
+                '</div>';
 
-  var card = document.querySelector('.product[data-producto-id="' + row.producto_id + '"]');
-  if (!card) return;
+            return card;
+        }
 
-  ['burger', 'combo'].forEach(function(field) {
-    var el = card.querySelector('[data-field="' + field + '"]');
-    if (!el || row[field] === undefined) return;
-    var formatted = formatPrice(row[field]);
-    if (formatted === null) return;
-    var currentText = el.textContent.replace('$', '').trim();
-    if (currentText === formatted) return;
-    el.innerHTML = '<span class="price-currency">$</span>' + formatted;
-    el.classList.remove('flash');
-    void el.offsetWidth;
-    el.classList.add('flash');
-  });
-}
+        function handlePriceUpdate(payload) {
+            var row = payload.new;
 
-async function init() {
-  if (!sucursalSlug || !plantillaSlug) {
-    showStatus('⚠️', 'URL incompleta. Formato: ?sucursal=SLUG&plantilla=SLUG');
-    return;
-  }
+            var hbnPriceEl = document.querySelector('#hbn-precio [data-producto-id="' + row.producto_id + '"]');
+            if (hbnPriceEl) {
+                var formatted = formatPrice(row.burger);
+                if (formatted !== null) {
+                    document.getElementById('hbn-valor').textContent = formatted;
+                    hbnPriceEl.classList.remove('flash');
+                    void hbnPriceEl.offsetWidth;
+                    hbnPriceEl.classList.add('flash');
+                }
+            }
 
-  showStatus('📡', 'Conectando...');
+            var card = document.querySelector('.product[data-producto-id="' + row.producto_id + '"]');
+            if (!card) return;
 
-  var sucursalRes = await db.from('sucursales').select('id').eq('slug', sucursalSlug).single();
-  if (sucursalRes.error || !sucursalRes.data) {
-    showStatus('❌', 'Sucursal "' + sucursalSlug + '" no encontrada');
-    return;
-  }
-  var sucursalId = sucursalRes.data.id;
+            ['burger', 'combo'].forEach(function (field) {
+                var el = card.querySelector('[data-field="' + field + '"]');
+                if (!el || row[field] === undefined) return;
+                var formatted = formatPrice(row[field]);
+                if (formatted === null) return;
+                var currentText = el.textContent.replace('$', '').trim();
+                if (currentText === formatted) return;
+                el.innerHTML = '<span class="price-currency">$</span>' + formatted;
+                el.classList.remove('flash');
+                void el.offsetWidth;
+                el.classList.add('flash');
+            });
+        }
 
-  var plantillaRes = await db.from('plantillas').select('id, nombre, descripcion').eq('slug', plantillaSlug).single();
-  if (plantillaRes.error || !plantillaRes.data) {
-    showStatus('❌', 'Plantilla "' + plantillaSlug + '" no encontrada');
-    return;
-  }
-  var plantilla = plantillaRes.data;
+        async function init() {
+            if (!sucursalSlug || !plantillaSlug) {
+                showStatus('⚠️', 'URL incompleta. Formato: ?sucursal=SLUG&plantilla=SLUG');
+                return;
+            }
 
-  document.title = plantilla.nombre + ' — ' + sucursalSlug;
+            showStatus('📡', 'Conectando...');
 
-  var productosRes = await db
-    .from('productos')
-    .select('*, precios(*)')
-    .eq('plantilla_id', plantilla.id)
-    .order('orden');
+            var sucursalRes = await db.from('sucursales').select('id').eq('slug', sucursalSlug).single();
+            if (sucursalRes.error || !sucursalRes.data) {
+                showStatus('❌', 'Sucursal "' + sucursalSlug + '" no encontrada');
+                return;
+            }
+            var sucursalId = sucursalRes.data.id;
 
-  if (productosRes.error || !productosRes.data) {
-    showStatus('❌', 'Error al cargar productos');
-    return;
-  }
+            var plantillaRes = await db.from('plantillas').select('id, nombre, descripcion').eq('slug', plantillaSlug).single();
+            if (plantillaRes.error || !plantillaRes.data) {
+                showStatus('❌', 'Plantilla "' + plantillaSlug + '" no encontrada');
+                return;
+            }
+            var plantilla = plantillaRes.data;
 
-  var productos = productosRes.data;
+            document.title = plantilla.nombre + ' — ' + sucursalSlug;
 
-  Object.keys(SECCIONES).forEach(function(key) {
-    var seccion = SECCIONES[key];
-    var grid = document.getElementById(seccion.gridId);
-    seccion.numeros.forEach(function(num) {
-      var producto = productos.find(function(p) { return p.numero === num; });
-      if (!producto) return;
-      var precio = producto.precios.find(function(p) { return p.sucursal_id === sucursalId; }) || {};
-      grid.appendChild(renderProduct(producto, precio, seccion));
-    });
-  });
+            var productosRes = await db
+                .from('productos')
+                .select('*, precios(*)')
+                .eq('plantilla_id', plantilla.id)
+                .order('orden');
 
-  var hbn = productos.find(function(p) { return p.numero === HBN_NUMERO; });
-  if (hbn) {
-    var hbnPrecio = hbn.precios.find(function(p) { return p.sucursal_id === sucursalId; }) || {};
-    var hbnPriceEl = document.querySelector('#hbn-precio [data-field="burger"]');
-    if (hbnPriceEl && hbnPrecio.burger !== null) {
-      hbnPriceEl.dataset.productoId = hbn.id;
-      document.getElementById('hbn-valor').textContent = formatPrice(hbnPrecio.burger);
-    }
-  }
+            if (productosRes.error || !productosRes.data) {
+                showStatus('❌', 'Error al cargar productos');
+                return;
+            }
 
-  db.channel('precios-' + sucursalSlug)
-    .on('postgres_changes', {
-      event: 'UPDATE',
-      schema: 'public',
-      table: 'precios',
-      filter: 'sucursal_id=eq.' + sucursalId
-    }, handlePriceUpdate)
-    .subscribe();
+            var productos = productosRes.data;
 
-  hideStatus();
-}
+            Object.keys(SECCIONES).forEach(function (key) {
+                var seccion = SECCIONES[key];
+                var grid = document.getElementById(seccion.gridId);
+                seccion.numeros.forEach(function (num) {
+                    var producto = productos.find(function (p) { return p.numero === num; });
+                    if (!producto) return;
+                    var precio = producto.precios.find(function (p) { return p.sucursal_id === sucursalId; }) || {};
+                    grid.appendChild(renderProduct(producto, precio, seccion));
+                });
+            });
 
-init();
-</script>
+            var hbn = productos.find(function (p) { return p.numero === HBN_NUMERO; });
+            if (hbn) {
+                var hbnPrecio = hbn.precios.find(function (p) { return p.sucursal_id === sucursalId; }) || {};
+                var hbnPriceEl = document.querySelector('#hbn-precio [data-field="burger"]');
+                if (hbnPriceEl && hbnPrecio.burger !== null) {
+                    hbnPriceEl.dataset.productoId = hbn.id;
+                    document.getElementById('hbn-valor').textContent = formatPrice(hbnPrecio.burger);
+                }
+            }
+
+            db.channel('precios-' + sucursalSlug)
+                .on('postgres_changes', {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'precios',
+                    filter: 'sucursal_id=eq.' + sucursalId
+                }, handlePriceUpdate)
+                .subscribe();
+
+            hideStatus();
+        }
+
+        init();
+    </script>
 </body>
+
 </html>

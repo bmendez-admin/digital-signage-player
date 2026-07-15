@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postres</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  font-family: 'Oswald', sans-serif;
+}
+
+#canvas {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  background-image: url('img/fondo_postres_plantilla.png');
+  background-size: 1080px 1920px;
+  background-repeat: no-repeat;
+}
+
+.precio {
+  position: absolute;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+  font-size: 52px;
+}
+
+.precio .sym { font-size: 1em; }
+
+#p-shake-chica   { top: 738px;  left: 90px;  }
+#p-shake-grande  { top: 820px;  left: 90px;  }
+#p-conos         { top: 1280px; left: 90px;  color: #1a1a1a; }
+#p-galleta       { top: 1340px; left: 460px; }
+#p-coffee        { top: 1790px; left: 60px;  color: #ffffff; }
+
+#status {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #2a2a2a;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  text-align: center;
+  z-index: 100;
+}
+
+.status-icon { font-size: 3em; margin-bottom: 20px; }
+
+@keyframes price-flash {
+  0%   { color: #ac0d24; transform: scale(1.2); }
+  100% { color: inherit; transform: scale(1); }
+}
+.flash { animation: price-flash 0.6s ease-out; }
+</style>
+</head>
+<body>
+
+<div id="canvas">
+  <div class="precio" id="p-shake-chica"  data-producto="1" data-field="burger"><span class="sym">$</span><span class="val">69</span></div>
+  <div class="precio" id="p-shake-grande" data-producto="2" data-field="burger"><span class="sym">$</span><span class="val">85</span></div>
+  <div class="precio" id="p-conos"        data-producto="3" data-field="burger"><span class="sym">$</span><span class="val">49</span></div>
+  <div class="precio" id="p-galleta"      data-producto="4" data-field="burger"><span class="sym">$</span><span class="val">19</span></div>
+  <div class="precio" id="p-coffee"       data-producto="5" data-field="burger"><span class="sym">$</span><span class="val">99</span></div>
+</div>
+
+<div id="status">
+  <div class="status-icon"></div>
+  <div id="status-message">Conectando...</div>
+</div>
+
+<script>
+var CONFIG = {
+  url: 'https://gbklqpbcllhdixiuxwzt.supabase.co',
+  key: 'sb_publishable_478TOeFf5POv09rZ58BeyQ_BA8rY8cf'
+};
+
+var params = new URLSearchParams(window.location.search);
+var sucursalSlug = params.get('sucursal');
+var plantillaSlug = params.get('plantilla');
+var db = supabase.createClient(CONFIG.url, CONFIG.key);
+
+function formatPrice(value) {
+  if (value === null || value === undefined) return null;
+  var num = parseFloat(value);
+  return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+}
+
+function showStatus(icon, message) {
+  var el = document.getElementById('status');
+  el.style.display = 'flex';
+  el.querySelector('.status-icon').textContent = icon;
+  el.querySelector('#status-message').textContent = message;
+}
+
+function hideStatus() {
+  document.getElementById('status').style.display = 'none';
+}
+
+function handlePriceUpdate(payload) {
+  var row = payload.new;
+  var els = document.querySelectorAll('[data-producto-id="' + row.producto_id + '"]');
+  els.forEach(function(el) {
+    var field = el.dataset.field;
+    if (row[field] === undefined || row[field] === null) return;
+    var formatted = formatPrice(row[field]);
+    var valEl = el.querySelector('.val');
+    if (!valEl || valEl.textContent === formatted) return;
+    valEl.textContent = formatted;
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+  });
+}
+
+async function init() {
+  if (!sucursalSlug || !plantillaSlug) {
+    showStatus('⚠️', 'URL incompleta. Formato: ?sucursal=SLUG&plantilla=SLUG');
+    return;
+  }
+
+  showStatus('📡', 'Conectando...');
+
+  var sucursalRes = await db.from('sucursales').select('id').eq('slug', sucursalSlug).single();
+  if (sucursalRes.error || !sucursalRes.data) {
+    showStatus('❌', 'Sucursal "' + sucursalSlug + '" no encontrada');
+    return;
+  }
+  var sucursalId = sucursalRes.data.id;
+
+  var plantillaRes = await db.from('plantillas').select('id, nombre').eq('slug', plantillaSlug).single();
+  if (plantillaRes.error || !plantillaRes.data) {
+    showStatus('❌', 'Plantilla "' + plantillaSlug + '" no encontrada');
+    return;
+  }
+  var plantillaId = plantillaRes.data.id;
+  document.title = plantillaRes.data.nombre + ' — ' + sucursalSlug;
+
+  var productosRes = await db
+    .from('productos')
+    .select('id, numero, precios(*)')
+    .eq('plantilla_id', plantillaId)
+    .order('orden');
+
+  if (productosRes.error || !productosRes.data) {
+    showStatus('❌', 'Error al cargar productos');
+    return;
+  }
+
+  productosRes.data.forEach(function(producto) {
+    var precio = producto.precios.find(function(p) { return p.sucursal_id === sucursalId; }) || {};
+    var els = document.querySelectorAll('[data-producto="' + producto.numero + '"]');
+    els.forEach(function(el) {
+      el.dataset.productoId = producto.id;
+      var field = el.dataset.field;
+      var val = precio[field];
+      if (val !== null && val !== undefined) {
+        el.querySelector('.val').textContent = formatPrice(val);
+      }
+    });
+  });
+
+  db.channel('precios-' + sucursalSlug)
+    .on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'precios',
+      filter: 'sucursal_id=eq.' + sucursalId
+    }, handlePriceUpdate)
+    .subscribe();
+
+  hideStatus();
+}
+
+init();
+</script>
+</body>
+</html>

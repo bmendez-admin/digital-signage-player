@@ -1,503 +1,267 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Signage Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Angus Burgers</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Oswald', 'Arial Black', sans-serif;
-        }
+html, body {
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  font-family: 'Oswald', sans-serif;
+}
 
-        body {
-            display: flex;
-            flex-direction: column;
-            background: #3b3b3b;
-        }
+#canvas {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  background-image: url('img/fondo_bigangus_plantilla.png');
+  background-size: 1080px 1920px;
+  background-repeat: no-repeat;
+}
 
-        header {
-            text-align: center;
-            padding: 2vh 2vw 1.2vh;
-            flex-shrink: 0;
-            background-color: #2a2a2a;
-            background-image: url('img/bg-dark.jpg');
-            background-size: cover;
-            background-position: center;
-        }
+.precio {
+  position: absolute;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+  font-size: 28px;
+}
 
-        header h1 {
-            font-size: clamp(80px, 5.5vw, 86px);
-            color: #ffffff;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            font-weight: 700;
-            text-shadow: 0 2px 12px rgba(255, 215, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.9);
-            line-height: 1;
-        }
+.precio .sym { font-size: 1em; }
 
-        header h1::before,
-        header h1::after {
-            content: '\2605';
-            margin: 0 0.2em;
-            font-size: 0.55em;
-            color: #ffd700;
-            vertical-align: middle;
-        }
+.p-upgrade { font-size: 32px; }
 
-        header p {
-            font-size: clamp(15px, 1.1vw, 16px);
-            color: #e0e0e0;
-            margin-top: 0.3vh;
-            letter-spacing: 0.06em;
-            font-weight: 400;
-            text-transform: uppercase;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-        }
+#p-ori-burger    { top: 702px;  left: 130px; }
+#p-ori-doble     { top: 702px;  left: 310px; }
+#p-ori-combo     { top: 746px;  left: 130px; }
+#p-ori-combo-d   { top: 746px;  left: 310px; }
 
-        #main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #d0c8c0;
-            background-image: url('img/bg-light.jpg');
-            background-size: cover;
-            background-position: center;
-            min-height: 0;
-        }
+#p-gua-burger    { top: 702px;  left: 668px; }
+#p-gua-doble     { top: 702px;  left: 848px; }
+#p-gua-combo     { top: 746px;  left: 668px; }
+#p-gua-combo-d   { top: 746px;  left: 848px; }
 
-        #grid {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            gap: 0;
-            padding: 0;
-            min-height: 0;
-        }
+#p-wes-burger    { top: 1098px; left: 130px; }
+#p-wes-doble     { top: 1098px; left: 310px; }
+#p-wes-combo     { top: 1142px; left: 130px; }
+#p-wes-combo-d   { top: 1142px; left: 310px; }
 
-        .product {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            position: relative;
-            padding: 0.5vh 2% 0.5vh;
-            min-height: 0;
-            overflow: hidden;
-        }
+#p-low-burger    { top: 1098px; left: 668px; }
+#p-low-doble     { top: 1098px; left: 848px; }
+#p-low-combo     { top: 1142px; left: 668px; }
+#p-low-combo-d   { top: 1142px; left: 848px; }
 
-        .product-number {
-            position: absolute;
-            top: 0.8vh;
-            left: 3%;
-            width: clamp(70px, 3.2vw, 54px);
-            height: clamp(70px, 3.2vw, 54px);
-            background: #ffd700;
-            color: #1a1a1a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(30px, 1.6vw, 28px);
-            font-weight: 700;
-            z-index: 2;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-        }
+#p-dia-burger    { top: 1718px; left: 130px; }
+#p-dia-doble     { top: 1718px; left: 310px; }
+#p-dia-combo     { top: 1762px; left: 130px; }
+#p-dia-combo-d   { top: 1762px; left: 310px; }
 
-        .product-image {
-            flex: 1;
-            width: 70%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 0;
-        }
+#p-mon-burger    { top: 1718px; left: 668px; }
+#p-mon-combo     { top: 1762px; left: 668px; }
 
-        .product-image img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: block;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-        }
+#p-mediano       { top: 1862px; left: 790px; }
+#p-grande        { top: 1862px; left: 960px; }
 
-        .product-info {
-            flex-shrink: 0;
-            text-align: center;
-            width: 100%;
-        }
+#status {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #2a2a2a;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  text-align: center;
+  z-index: 100;
+}
 
-        .product-name {
-            font-size: clamp(45px, 2.8vw, 46px);
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.05;
-            color: #1a1a1a;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-        }
+.status-icon { font-size: 3em; margin-bottom: 20px; }
 
-        .product-subtitle {
-            font-size: clamp(25px, 1vw, 16px);
-            color: #444444;
-            font-weight: 400;
-            font-style: italic;
-            text-align: center;
-            margin-bottom: 0.2vh;
-        }
-
-        .prices {
-            display: grid;
-            gap: 0;
-            width: 100%;
-        }
-
-        .prices.cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .prices.cols-1 {
-            grid-template-columns: 1fr;
-            max-width: 50%;
-            margin: 0 auto;
-        }
-
-        .price-item {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 0.3vw;
-            padding: 0.1vh 0;
-        }
-
-        .price-label {
-            font-size: clamp(18px, 0.75vw, 12px);
-            color: #000000;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 700;
-        }
-
-        .price-value {
-            font-size: clamp(30px, 3vw, 50px);
-            font-weight: 700;
-            line-height: 1;
-            display: inline-block;
-            color: #1a1a1a;
-        }
-
-        .price-currency {
-            font-size: 1.25rem;
-            vertical-align: super;
-            margin-right: 1px;
-        }
-
-        .note-bar {
-            flex-shrink: 0;
-            text-align: center;
-            padding: 0.3vh 2vw;
-            font-size: clamp(12px, 0.6vw, 10px);
-            color: #000000;
-            letter-spacing: 0.04em;
-            font-weight: 400;
-        }
-
-        footer {
-            flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.92);
-            padding: 1vh 3vw;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2.5vw;
-            border-top: 3px solid #ac0d24;
-        }
-
-        .upgrade-title {
-            font-size: clamp(30px, 2.5vw, 42px);
-            text-transform: uppercase;
-            color: #1a1a1a;
-            font-weight: 900;
-        }
-
-        .upgrade-title em {
-            color: #ac0d24;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-weight: 900;
-        }
-
-        .upgrade-option {
-            text-align: center;
-        }
-
-        .upgrade-label {
-            font-size: clamp(18px, 0.9vw, 14px);
-            color: #000000;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .upgrade-price {
-            font-size: clamp(30px, 2.8vw, 46px);
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-
-        .upgrade-currency {
-            font-size: 1.25rem;
-            vertical-align: super;
-        }
-
-        #status {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: #3b3b3b;
-            color: #ffffff;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2vh;
-            font-size: clamp(14px, 2vw, 28px);
-            padding: 5vw;
-            text-align: center;
-            z-index: 100;
-        }
-
-        .status-icon {
-            font-size: 3em;
-        }
-
-        @keyframes price-flash {
-            0% {
-                color: #ac0d24;
-                transform: scale(1.2);
-            }
-
-            100% {
-                color: #1a1a1a;
-                transform: scale(1);
-            }
-        }
-
-        .flash {
-            animation: price-flash 0.6s ease-out;
-        }
-    </style>
+@keyframes price-flash {
+  0%   { color: #ac0d24; transform: scale(1.2); }
+  100% { color: #1a1a1a; transform: scale(1); }
+}
+.flash { animation: price-flash 0.6s ease-out; }
+</style>
 </head>
-
 <body>
 
-    <header>
-        <h1 id="menu-title">Cargando...</h1>
-        <p id="menu-subtitle"></p>
-    </header>
+<div id="canvas">
+  <div class="precio" id="p-ori-burger"  data-producto="7"  data-field="burger"><span class="sym">$</span><span class="val">149</span></div>
+  <div class="precio" id="p-ori-doble"   data-producto="7"  data-field="doble"><span class="sym">$</span><span class="val">205</span></div>
+  <div class="precio" id="p-ori-combo"   data-producto="7"  data-field="combo"><span class="sym">$</span><span class="val">215</span></div>
+  <div class="precio" id="p-ori-combo-d" data-producto="7"  data-field="combo_doble"><span class="sym">$</span><span class="val">269</span></div>
 
-    <div id="main">
-        <div id="grid"></div>
-        <div class="note-bar">1/3 LB. = 150 GR., LA VERSIÓN DOBLE INCLUYE 2 PIEZAS DE 1/3 DE LB. Y DOS REBANADAS DE
-            QUESO.</div>
-        <footer id="upgrades"></footer>
-    </div>
+  <div class="precio" id="p-gua-burger"  data-producto="8"  data-field="burger"><span class="sym">$</span><span class="val">169</span></div>
+  <div class="precio" id="p-gua-doble"   data-producto="8"  data-field="doble"><span class="sym">$</span><span class="val">225</span></div>
+  <div class="precio" id="p-gua-combo"   data-producto="8"  data-field="combo"><span class="sym">$</span><span class="val">239</span></div>
+  <div class="precio" id="p-gua-combo-d" data-producto="8"  data-field="combo_doble"><span class="sym">$</span><span class="val">289</span></div>
 
-    <div id="status">
-        <div class="status-icon"></div>
-        <div id="status-message">Conectando...</div>
-    </div>
+  <div class="precio" id="p-wes-burger"  data-producto="9"  data-field="burger"><span class="sym">$</span><span class="val">159</span></div>
+  <div class="precio" id="p-wes-doble"   data-producto="9"  data-field="doble"><span class="sym">$</span><span class="val">215</span></div>
+  <div class="precio" id="p-wes-combo"   data-producto="9"  data-field="combo"><span class="sym">$</span><span class="val">229</span></div>
+  <div class="precio" id="p-wes-combo-d" data-producto="9"  data-field="combo_doble"><span class="sym">$</span><span class="val">279</span></div>
 
-    <script>
-        var CONFIG = {
-            url: 'https://gbklqpbcllhdixiuxwzt.supabase.co',
-            key: 'sb_publishable_478TOeFf5POv09rZ58BeyQ_BA8rY8cf'
-        };
+  <div class="precio" id="p-low-burger"  data-producto="10" data-field="burger"><span class="sym">$</span><span class="val">139</span></div>
+  <div class="precio" id="p-low-doble"   data-producto="10" data-field="doble"><span class="sym">$</span><span class="val">195</span></div>
+  <div class="precio" id="p-low-combo"   data-producto="10" data-field="combo"><span class="sym">$</span><span class="val">209</span></div>
+  <div class="precio" id="p-low-combo-d" data-producto="10" data-field="combo_doble"><span class="sym">$</span><span class="val">259</span></div>
 
-        var params = new URLSearchParams(window.location.search);
-        var sucursalSlug = params.get('sucursal');
-        var plantillaSlug = params.get('plantilla');
+  <div class="precio" id="p-dia-burger"  data-producto="11" data-field="burger"><span class="sym">$</span><span class="val">185</span></div>
+  <div class="precio" id="p-dia-doble"   data-producto="11" data-field="doble"><span class="sym">$</span><span class="val">241</span></div>
+  <div class="precio" id="p-dia-combo"   data-producto="11" data-field="combo"><span class="sym">$</span><span class="val">249</span></div>
+  <div class="precio" id="p-dia-combo-d" data-producto="11" data-field="combo_doble"><span class="sym">$</span><span class="val">305</span></div>
 
-        var db = supabase.createClient(CONFIG.url, CONFIG.key);
+  <div class="precio" id="p-mon-burger"  data-producto="12" data-field="burger"><span class="sym">$</span><span class="val">258</span></div>
+  <div class="precio" id="p-mon-combo"   data-producto="12" data-field="combo"><span class="sym">$</span><span class="val">299</span></div>
 
-        function formatPrice(value) {
-            if (value === null || value === undefined) return null;
-            var num = parseFloat(value);
-            return Number.isInteger(num) ? num.toString() : num.toFixed(2);
-        }
+  <div class="precio p-upgrade" id="p-mediano" data-upgrade="mediano"><span class="sym">$</span><span class="val">23</span></div>
+  <div class="precio p-upgrade" id="p-grande"  data-upgrade="grande"><span class="sym">$</span><span class="val">27</span></div>
+</div>
 
-        function showStatus(icon, message) {
-            var el = document.getElementById('status');
-            el.style.display = 'flex';
-            el.querySelector('.status-icon').textContent = icon;
-            el.querySelector('#status-message').textContent = message;
-        }
+<div id="status">
+  <div class="status-icon"></div>
+  <div id="status-message">Conectando...</div>
+</div>
 
-        function hideStatus() {
-            document.getElementById('status').style.display = 'none';
-        }
+<script>
+var CONFIG = {
+  url: 'https://gbklqpbcllhdixiuxwzt.supabase.co',
+  key: 'sb_publishable_478TOeFf5POv09rZ58BeyQ_BA8rY8cf'
+};
 
-        function buildPriceHTML(label, value, field) {
-            if (value === null || value === undefined) return '';
-            return '<div class="price-item">' +
-                '<span class="price-label">' + label + '</span> ' +
-                '<span class="price-value" data-field="' + field + '"><span class="price-currency">$</span>' + formatPrice(value) + '</span>' +
-                '</div>';
-        }
+var params = new URLSearchParams(window.location.search);
+var sucursalSlug = params.get('sucursal');
+var plantillaSlug = params.get('plantilla');
+var db = supabase.createClient(CONFIG.url, CONFIG.key);
 
-        function renderProduct(producto, sucursalId) {
-            var precio = producto.precios.find(function (p) { return p.sucursal_id === sucursalId; }) || {};
-            var card = document.createElement('div');
-            card.className = 'product';
-            card.dataset.productoId = producto.id;
+function formatPrice(value) {
+  if (value === null || value === undefined) return null;
+  var num = parseFloat(value);
+  return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+}
 
-            var variants = [
-                { key: 'burger', label: 'Burger' },
-                { key: 'doble', label: 'Doble' },
-                { key: 'combo', label: 'Combo' },
-                { key: 'combo_doble', label: 'Combo' }
-            ];
+function showStatus(icon, message) {
+  var el = document.getElementById('status');
+  el.style.display = 'flex';
+  el.querySelector('.status-icon').textContent = icon;
+  el.querySelector('#status-message').textContent = message;
+}
 
-            var activePrices = variants
-                .map(function (v) { return buildPriceHTML(v.label, precio[v.key], v.key); })
-                .filter(function (html) { return html !== ''; });
+function hideStatus() {
+  document.getElementById('status').style.display = 'none';
+}
 
-            var colsClass = activePrices.length <= 2 ? 'cols-1' : 'cols-2';
+function handlePriceUpdate(payload) {
+  var row = payload.new;
+  var els = document.querySelectorAll('[data-producto-id="' + row.producto_id + '"]');
+  els.forEach(function(el) {
+    var field = el.dataset.field;
+    if (row[field] === undefined || row[field] === null) return;
+    var formatted = formatPrice(row[field]);
+    var valEl = el.querySelector('.val');
+    if (!valEl || valEl.textContent === formatted) return;
+    valEl.textContent = formatted;
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+  });
+}
 
-            var imageHTML = '';
-            if (producto.imagen_url) {
-                imageHTML = '<div class="product-image"><img src="' + producto.imagen_url + '" alt="' + producto.nombre + '"></div>';
-            }
+function handleUpgradeUpdate(payload) {
+  var row = payload.new;
+  var el = document.querySelector('[data-upgrade-id="' + row.id + '"]');
+  if (!el) return;
+  var formatted = formatPrice(row.precio);
+  if (!formatted) return;
+  el.querySelector('.val').textContent = formatted;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
 
-            card.innerHTML =
-                '<div class="product-number">' + producto.numero + '</div>' +
-                imageHTML +
-                '<div class="product-info">' +
-                '<div class="product-name">' + producto.nombre + '</div>' +
-                '<div class="product-subtitle">' + producto.subtitulo + '</div>' +
-                '<div class="prices ' + colsClass + '">' + activePrices.join('') + '</div>' +
-                '</div>';
+async function init() {
+  if (!sucursalSlug || !plantillaSlug) {
+    showStatus('⚠️', 'URL incompleta. Formato: ?sucursal=SLUG&plantilla=SLUG');
+    return;
+  }
 
-            return card;
-        }
+  showStatus('📡', 'Conectando...');
 
-        function renderUpgrades(upgrades) {
-            var footer = document.getElementById('upgrades');
-            var html = '<div class="upgrade-title"><em>Agranda</em> TU COMBO</div>';
+  var sucursalRes = await db.from('sucursales').select('id').eq('slug', sucursalSlug).single();
+  if (sucursalRes.error || !sucursalRes.data) {
+    showStatus('❌', 'Sucursal "' + sucursalSlug + '" no encontrada');
+    return;
+  }
+  var sucursalId = sucursalRes.data.id;
 
-            upgrades.forEach(function (u) {
-                html +=
-                    '<div class="upgrade-option" data-upgrade-id="' + u.id + '">' +
-                    '<div class="upgrade-label">' + u.nombre + '</div>' +
-                    '<div class="upgrade-price"><span class="upgrade-currency">$</span>' + formatPrice(u.precio) + '</div>' +
-                    '</div>';
-            });
+  var plantillaRes = await db.from('plantillas').select('id, nombre').eq('slug', plantillaSlug).single();
+  if (plantillaRes.error || !plantillaRes.data) {
+    showStatus('❌', 'Plantilla "' + plantillaSlug + '" no encontrada');
+    return;
+  }
+  var plantillaId = plantillaRes.data.id;
+  document.title = plantillaRes.data.nombre + ' — ' + sucursalSlug;
 
-            footer.innerHTML = html;
-        }
+  var productosRes = await db
+    .from('productos')
+    .select('id, numero, precios(*)')
+    .eq('plantilla_id', plantillaId)
+    .order('orden');
 
-        function handlePriceUpdate(payload) {
-            var row = payload.new;
-            var card = document.querySelector('[data-producto-id="' + row.producto_id + '"]');
-            if (!card) return;
+  if (productosRes.error || !productosRes.data) {
+    showStatus('❌', 'Error al cargar productos');
+    return;
+  }
 
-            ['burger', 'doble', 'combo', 'combo_doble'].forEach(function (field) {
-                var el = card.querySelector('[data-field="' + field + '"]');
-                if (!el || row[field] === undefined) return;
+  productosRes.data.forEach(function(producto) {
+    var precio = producto.precios.find(function(p) { return p.sucursal_id === sucursalId; }) || {};
+    var els = document.querySelectorAll('[data-producto="' + producto.numero + '"]');
+    els.forEach(function(el) {
+      el.dataset.productoId = producto.id;
+      var field = el.dataset.field;
+      var val = precio[field];
+      if (val !== null && val !== undefined) {
+        el.querySelector('.val').textContent = formatPrice(val);
+      }
+    });
+  });
 
-                var formatted = formatPrice(row[field]);
-                if (formatted === null) return;
+  var upgradesRes = await db
+    .from('upgrades')
+    .select('*')
+    .eq('plantilla_id', plantillaId)
+    .eq('sucursal_id', sucursalId)
+    .order('orden');
 
-                var currentText = el.textContent.replace('$', '').trim();
-                if (currentText === formatted) return;
+  if (upgradesRes.data && upgradesRes.data.length > 0) {
+    upgradesRes.data.forEach(function(u, i) {
+      var key = i === 0 ? 'mediano' : 'grande';
+      var el = document.querySelector('[data-upgrade="' + key + '"]');
+      if (el) {
+        el.dataset.upgradeId = u.id;
+        el.querySelector('.val').textContent = formatPrice(u.precio);
+      }
+    });
+  }
 
-                el.innerHTML = '<span class="price-currency">$</span>' + formatted;
-                el.classList.remove('flash');
-                void el.offsetWidth;
-                el.classList.add('flash');
-            });
-        }
+  db.channel('precios-' + sucursalSlug)
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'precios', filter: 'sucursal_id=eq.' + sucursalId }, handlePriceUpdate)
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'upgrades', filter: 'sucursal_id=eq.' + sucursalId }, handleUpgradeUpdate)
+    .subscribe();
 
-        async function init() {
-            if (!sucursalSlug || !plantillaSlug) {
-                showStatus('⚠️', 'URL incompleta. Formato: ?sucursal=SLUG&plantilla=SLUG');
-                return;
-            }
+  hideStatus();
+}
 
-            showStatus('📡', 'Conectando...');
-
-            var sucursalRes = await db.from('sucursales').select('id').eq('slug', sucursalSlug).single();
-            if (sucursalRes.error || !sucursalRes.data) {
-                showStatus('❌', 'Sucursal "' + sucursalSlug + '" no encontrada');
-                return;
-            }
-            var sucursalId = sucursalRes.data.id;
-
-            var plantillaRes = await db.from('plantillas').select('id, nombre, descripcion').eq('slug', plantillaSlug).single();
-            if (plantillaRes.error || !plantillaRes.data) {
-                showStatus('❌', 'Plantilla "' + plantillaSlug + '" no encontrada');
-                return;
-            }
-            var plantilla = plantillaRes.data;
-
-            document.getElementById('menu-title').textContent = plantilla.nombre;
-            document.getElementById('menu-subtitle').textContent = plantilla.descripcion || '';
-            document.title = plantilla.nombre + ' — ' + sucursalSlug;
-
-            var productosRes = await db
-                .from('productos')
-                .select('*, precios(*)')
-                .eq('plantilla_id', plantilla.id)
-                .order('orden');
-
-            if (productosRes.error || !productosRes.data) {
-                showStatus('❌', 'Error al cargar productos');
-                return;
-            }
-
-            var grid = document.getElementById('grid');
-            productosRes.data.forEach(function (p) {
-                grid.appendChild(renderProduct(p, sucursalId));
-            });
-
-            var upgradesRes = await db
-                .from('upgrades')
-                .select('*')
-                .eq('plantilla_id', plantilla.id)
-                .eq('sucursal_id', sucursalId)
-                .order('orden');
-
-            if (upgradesRes.data && upgradesRes.data.length > 0) {
-                renderUpgrades(upgradesRes.data);
-            }
-
-            db.channel('precios-' + sucursalSlug)
-                .on('postgres_changes', {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'precios',
-                    filter: 'sucursal_id=eq.' + sucursalId
-                }, handlePriceUpdate)
-                .subscribe();
-
-            hideStatus();
-        }
-
-        init();
-    </script>
+init();
+</script>
 </body>
-
 </html>
